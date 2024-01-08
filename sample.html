@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>IO chat</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <!-- Latest compiled and minified CSS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="/socket.io/socket.io.js"></script>
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <div class="container">
+        <div id="userArea" class="row">
+            <div class="col-md-12">
+                    <form id="userForm"> 
+                        <div class="form-group">
+                            <label>Enter User Name</label>
+                            <input class="form-control" id="username">
+                            <br>
+                            <input type="submit" value="login" class="btn btn-primary"> 
+                        </div>
+                    </form>
+                </div>
+        </div>
+        <div id="msgArea" class="row">
+            <div class="col-md-4">
+                <h3>online user</h3>
+                <ui class="list-group" id="users"></ui>
+            </div>
+            <div class="col-md-8">
+                <div class="chat" id="chat"></div>
+                <form id="msgForm"> 
+                    <div class="form-group">
+                        <label>Enter msg</label>
+                        <textarea class="form-control" id="msg"></textarea>
+                        <br>
+                        <input type="submit" class="btn btn-primary"> 
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function(){
+           const socket = io.connect();
+           $('#msgArea').hide();
+
+           $("#userForm").on('submit', (e)=>{
+                // 소켓메세지 전송
+                let userName = $('#username').val();
+                console.log(userName);
+                socket.emit('newUser', userName, toggle);
+                // $('#userArea').hide();
+                // $('#msgArea').show();
+                e.preventDefault();
+           });
+
+           
+           $("#msgForm").on('submit', (e)=>{
+                // 소켓메세지 전송
+                let msg = $('#msg').val();
+                socket.emit('newMsg', msg)
+                e.preventDefault();
+           });
+
+           socket.on('newMsgFromServer', (msg) => {
+            const chat = `<div class='chat-item'><span class='chat-user-name'>${msg.userName}</span>: ${msg.msg}</div>`;
+            $('#chat').append(chat);
+
+            //  입력창 초기화
+            $('#msg').val("");
+           });
+
+           const toggle = (isOk) => {
+          
+            if (isOk){
+                console.log('toggle');
+                $('#userArea').toggle();
+               $('#msgArea').toggle();
+            }
+           }
+
+           socket.on('allUser', (users)=>{
+            $('#users').empty();
+            users.map(user => {
+                let li = `<li class="list-group-item">${user}</li>`;
+                $('#users').append(li);
+            });
+           });
+        });
+    </script>
+</body>
+</html>
