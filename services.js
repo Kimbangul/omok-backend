@@ -77,8 +77,4 @@ class Service {
   }
 }
 
-const service = new Service();
-const code = service.getCode();
-console.log(code);
-service.joinRoom(code);
-service.joinRoom(code);
+module.exports = Service;
