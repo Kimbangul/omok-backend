@@ -12,8 +12,9 @@ const service = new Service();
 
 app.use(express.json());
 
-app.get('/', function (request, response) {
+app.get('/room/add', function (request, response) {
   const code = service.getCode();
+  //console.log(request);
   console.log(code);
 
   const dummy = {
