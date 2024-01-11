@@ -1,10 +1,10 @@
-const { getRandomInt } = require('./util.js');
+const { getRandomInt } = require('../util/util.js');
 
 // CLASS 방 정보
 class Room {
   constructor() {
     this.memberCnt = 1;
-    this.score = {black: 0, white: 0};
+    this.score = { black: 0, white: 0 };
   }
   getMemberCnt() {
     return this.memberCnt;
