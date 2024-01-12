@@ -47,7 +47,7 @@ class Service {
   // FUNCTION 방이 존재하는지 확인
   findRoom(roomCode) {
     console.log(this.roomInfo[roomCode]);
-    if (this.roomInfo[roomCode] !== (undefined || null)) {
+    if (this.roomInfo[roomCode] !== undefined && this.roomInfo[roomCode] !== null) {
       console.log(true);
       return true;
     }

@@ -11,7 +11,6 @@ const initSocket = (server) => {
   });
 
   let socketList = {};
-  console.log();
 
   io.sockets.on('connection', function (socket) {
     socketList[socket.id] = socket;
@@ -26,6 +25,7 @@ const initSocket = (server) => {
     });
 
     socket.on('disconnect', () => {
+      delete this.socketList[socket.id];
       console.log('disconnect');
     });
   });
