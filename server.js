@@ -1,10 +1,13 @@
-const express = require('express');
+import express from 'express';
+import http from 'http';
+import initSocket from './service/socket.js';
+import Service from './service/services.js';
+//const express = require('express');
 const app = express();
-const server = require('http').createServer(app);
-const socket = require('./service/socket');
-const Service = require('./service/services');
+const server = http.createServer(app);
+//const server = require('http').createServer(app);
 
-socket.init(server);
+initSocket(server);
 server.listen(8000);
 console.log('server is running');
 

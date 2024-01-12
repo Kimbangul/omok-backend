@@ -1,4 +1,4 @@
-const { getRandomInt } = require('../util/util.js');
+import { getRandomInt } from '../util/util.js';
 
 // CLASS 방 정보
 class Room {
@@ -78,4 +78,4 @@ class Service {
   }
 }
 
-module.exports = Service;
+export default Service;

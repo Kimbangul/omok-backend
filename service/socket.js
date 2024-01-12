@@ -1,9 +1,9 @@
-const socket = require('socket.io');
+import { Server } from 'socket.io';
 
 const room = [];
 
 const initSocket = (server) => {
-  const io = socket(server, {
+  const io = new Server(server, {
     cors: {
       origin: 'http://127.0.0.1:3000',
       credentials: true,
@@ -26,4 +26,4 @@ const initSocket = (server) => {
   });
 };
 
-module.exports.init = initSocket;
+export default initSocket;
