@@ -4,6 +4,7 @@ import initSocket from './service/socket.js';
 import cors from 'cors';
 import Service from './service/services.js';
 import { corsOptions } from './util/util.js';
+import { addRoom } from './router/index.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -17,14 +18,4 @@ const service = new Service();
 app.use(express.json());
 app.use(cors(corsOptions));
 
-app.post('/room/add', function (request, response) {
-  const code = service.getCode();
-  //console.log(request);
-  console.log(code);
-
-  const data = {
-    code: code,
-  };
-  response.status(200);
-  response.json(data);
-});
+app.post('/room/add', (req, res) => addRoom(req, res, service));

@@ -10,8 +10,13 @@ const initSocket = (server) => {
     },
   });
 
+  let socketList = {};
+  console.log();
+
   io.sockets.on('connection', function (socket) {
-    console.log('connection : %s sockets connected', socket);
+    socketList[socket.id] = socket;
+    console.log(socket.id);
+    console.log('connection : %s sockets connected', Object.keys(socketList).length);
 
     // FUNCTION 새로운 방 생성
     socket.on('newRoom', (msg) => {
