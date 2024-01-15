@@ -2,7 +2,7 @@ import { Server } from 'socket.io';
 
 const room = [];
 
-const initSocket = (server) => {
+const initSocket = (server, service) => {
   const io = new Server(server, {
     cors: {
       origin: 'http://127.0.0.1:3000',
@@ -24,8 +24,16 @@ const initSocket = (server) => {
       // io.sockets.emit('newMsgFromServer', message);
     });
 
+    socket.on('leaveRoom', (code) => {
+      console.log(`leaveRoom ${code}`);
+      service.leaveRoom(code);
+      console.log(service.roomInfo);
+    });
+
     socket.on('disconnect', () => {
-      delete this.socketList[socket.id];
+      if (this.socketList[socket.id]) {
+        delete this.socketList[socket.id];
+      }
       console.log('disconnect');
     });
   });

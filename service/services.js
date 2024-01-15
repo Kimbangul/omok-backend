@@ -40,6 +40,7 @@ class Service {
   }
 
   deleteRoom(roomCode) {
+    console.log(this.roomInfo[roomCode]);
     delete this.roomInfo[roomCode];
     console.log(this.roomInfo);
   }
@@ -58,7 +59,8 @@ class Service {
   // FUNCTION 방 떠나기
   leaveRoom(roomCode) {
     this.roomInfo[roomCode].removeMember();
-    if (this.roomInfo[roomCode].getMemberCnt <= 0) deleteRoom(roomCode);
+    console.log(this.roomInfo[roomCode].getMemberCnt());
+    if (this.roomInfo[roomCode].getMemberCnt() <= 0) this.deleteRoom(roomCode);
   }
 
   // FUNCTION 방 참가
