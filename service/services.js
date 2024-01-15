@@ -93,4 +93,8 @@ class Service {
   }
 }
 
-export default Service;
+const service = new Service();
+
+export default service;
+
+//export default Service;

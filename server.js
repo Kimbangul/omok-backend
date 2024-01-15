@@ -10,8 +10,8 @@ import { addRoom, joinRoom } from './router/index.js';
 const app = express();
 const server = http.createServer(app);
 
-const service = new Service();
-const socket = initSocket(server, service);
+//const service =Service();
+const socket = initSocket(server, Service);
 setEvent(socket);
 
 server.listen(8000);
@@ -21,5 +21,5 @@ console.log('server is running');
 app.use(express.json());
 app.use(cors(corsOptions));
 
-app.post('/room/add', (req, res) => addRoom(req, res, service));
-app.post('/room/join', (req, res) => joinRoom(req, res, service));
+app.post('/room/add', (req, res) => addRoom(req, res, Service));
+app.post('/room/join', (req, res) => joinRoom(req, res, Service));

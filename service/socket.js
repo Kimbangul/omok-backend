@@ -1,13 +1,11 @@
 import { Server } from 'socket.io';
-import Service from './services.js';
+import service from './services.js';
 import { corsOptions } from '../util/util.js';
 
 const initSocket = (server, service) => {
   const io = new Server(server, {
     cors: corsOptions,
   });
-
-  let socketList = {};
 
   // io.sockets.on('connection', function (socket) {
   //   socketList[socket.id] = socket;
@@ -39,6 +37,8 @@ const initSocket = (server, service) => {
 };
 
 export const setEvent = (io) => {
+  let socketList = {};
+
   io.sockets.on('connection', function (socket) {
     socketList[socket.id] = socket;
     console.log(socket.id);
