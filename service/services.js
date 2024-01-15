@@ -5,6 +5,7 @@ class Room {
   constructor() {
     this.memberCnt = 1;
     this.score = { black: 0, white: 0 };
+    this.gameState = [];
   }
   getMemberCnt() {
     return this.memberCnt;
@@ -14,6 +15,18 @@ class Room {
   }
   removeMember() {
     this.memberCnt--;
+  }
+  setGame() {
+    this.gameState = [];
+  }
+  updateGame(game) {
+    this.gameState = game;
+  }
+  setScore(black, white) {
+    this.score = {
+      black: black,
+      white: white,
+    };
   }
 }
 // CLASS 서비스 로직

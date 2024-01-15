@@ -1,6 +1,7 @@
 import express from 'express';
 import http from 'http';
-import initSocket from './service/socket.js';
+// import initSocket from './service/socket.js';
+import socket from './service/socket.js';
 import cors from 'cors';
 import Service from './service/services.js';
 import { corsOptions } from './util/util.js';
@@ -10,8 +11,9 @@ const app = express();
 const server = http.createServer(app);
 
 const service = new Service();
-initSocket(server, service);
+// initSocket(server, service);
 server.listen(8000);
+socket.init(server);
 console.log('server is running');
 
 app.use(express.json());
