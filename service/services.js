@@ -78,18 +78,20 @@ class Service {
 
   // FUNCTION 방 참가
   joinRoom(roomCode) {
+    let msg = {};
     console.log(this.findRoom(roomCode));
     if (this.findRoom(roomCode)) {
       if (this.roomInfo[roomCode].getMemberCnt() >= 2) {
-        console.log('인원이 초과되었습니다.');
-        return;
+        // console.log('인원이 초과되었습니다.');
+        msg = { message: '인원이 초과되었습니다.' };
+        return msg;
       }
-
       this.roomInfo[roomCode].addMember();
       console.log(this.roomInfo);
-      return;
+      return msg;
     }
-    console.log('방 정보가 없습니다.');
+    msg = { message: '방 정보가 없습니다.' };
+    return msg;
   }
 }
 

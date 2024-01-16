@@ -1,3 +1,5 @@
+import Status from '../../status';
+
 export default function joinRoom(request, response, service) {
   let msg;
   let result;
