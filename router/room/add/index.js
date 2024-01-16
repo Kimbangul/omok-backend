@@ -1,4 +1,4 @@
-import Status from '../../status';
+import Status from '../../status.js';
 
 export default function addRoom(request, response, service) {
   const code = service.getCode();

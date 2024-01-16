@@ -58,8 +58,8 @@ export const setEvent = (io) => {
     });
 
     socket.on('disconnect', () => {
-      if (this.socketList[socket.id]) {
-        delete this.socketList[socket.id];
+      if (socket.id in socketList) {
+        delete socketList[socket.id];
       }
       console.log('disconnect');
     });

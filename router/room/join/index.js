@@ -1,4 +1,4 @@
-import Status from '../../status';
+import Status from '../../status.js';
 
 export default function joinRoom(request, response, service) {
   let msg;
@@ -7,15 +7,13 @@ export default function joinRoom(request, response, service) {
 
   console.log(service.room);
   if (service.findRoom(code)) {
-    service.joinRoom(code);
-    msg = 'join';
-    result = 'success';
+    result = service.joinRoom(code);
   } else {
-    msg = 'error';
-    result = 'failed';
+    result = new Status(404, undefined, '해당  방 정보가 없습니다.');
   }
 
-  const data = { message: msg, result: result };
-  response.status(200);
-  response.json(data);
+  result.send(response);
+  // const data = { message: msg, result: result };
+  // response.status(200);
+  // response.json(data);
 }

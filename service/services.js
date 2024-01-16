@@ -1,4 +1,5 @@
 import { getRandomInt } from '../util/util.js';
+import Status from '../router/status.js';
 
 // CLASS 방 정보
 class Room {
@@ -71,6 +72,10 @@ class Service {
 
   // FUNCTION 방 떠나기
   leaveRoom(roomCode) {
+    if (!this.findRoom(roomCode)) {
+      console.log(this.roomInfo);
+      return;
+    }
     this.roomInfo[roomCode].removeMember();
     console.log(this.roomInfo[roomCode].getMemberCnt());
     if (this.roomInfo[roomCode].getMemberCnt() <= 0) this.deleteRoom(roomCode);
@@ -78,20 +83,23 @@ class Service {
 
   // FUNCTION 방 참가
   joinRoom(roomCode) {
-    let msg = {};
+    let result;
+
     console.log(this.findRoom(roomCode));
     if (this.findRoom(roomCode)) {
       if (this.roomInfo[roomCode].getMemberCnt() >= 2) {
         // console.log('인원이 초과되었습니다.');
-        msg = { message: '인원이 초과되었습니다.' };
-        return msg;
+        result = new Status(501, undefined, '인원이 초과되었습니다.');
+      } else {
+        this.roomInfo[roomCode].addMember();
+        console.log(this.roomInfo);
+        result = new Status(200, undefined, '방 입장');
       }
-      this.roomInfo[roomCode].addMember();
-      console.log(this.roomInfo);
-      return msg;
+    } else {
+      result = new Status(501, undefined, '방 정보가 없습니다.');
+      // result = { message: '방 정보가 없습니다.' };
     }
-    msg = { message: '방 정보가 없습니다.' };
-    return msg;
+    return result;
   }
 }
 

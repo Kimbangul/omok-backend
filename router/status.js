@@ -1,6 +1,6 @@
 class Status {
   constructor(status, data, message) {
-    this.data = { ...data };
+    this.data = { ...data, message: message };
     this.status = status;
     this.message = message;
   }
