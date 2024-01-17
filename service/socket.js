@@ -40,26 +40,27 @@ export const setEvent = (io) => {
   let socketList = {};
 
   io.sockets.on('connection', function (socket) {
-    socketList[socket.id] = socket;
-    console.log(socket.id);
+    const id = socket.id;
+    socketList[id] = socket;
+    console.log(id);
     console.log('connection : %s sockets connected', Object.keys(socketList).length);
 
     // FUNCTION 새로운 방 생성
-    socket.on('newRoom', (msg) => {
-      const message = { userName: socket.userName, msg: msg };
-      console.log(`{ userName: ${socket.userName}, msg: ${msg} }`);
+    socket.on('newRoom', (code) => {
+      console.log(`{ userName: ${socket.userName}, code: ${code} }`);
+      service.addRoom(code, id);
       // io.sockets.emit('newMsgFromServer', message);
     });
 
     // FUNCTION 방 떠나기
     socket.on('leaveRoom', (code) => {
       console.log(`leaveRoom ${code}`);
-      service.leaveRoom(code);
+      service.leaveRoom(code, id);
     });
 
     socket.on('disconnect', () => {
-      if (socket.id in socketList) {
-        delete socketList[socket.id];
+      if (id in socketList) {
+        delete socketList[id];
       }
       console.log('disconnect');
     });

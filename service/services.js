@@ -3,7 +3,8 @@ import Status from '../router/status.js';
 
 // CLASS 방 정보
 class Room {
-  constructor() {
+  constructor(id) {
+    this.member = [id];
     this.memberCnt = 1;
     this.score = { black: 0, white: 0 };
     this.gameState = [];
@@ -11,10 +12,12 @@ class Room {
   getMemberCnt() {
     return this.memberCnt;
   }
-  addMember() {
+  addMember(id) {
+    this.member.push(id);
     this.memberCnt++;
   }
-  removeMember() {
+  removeMember(id) {
+    this.member = this.member.filter((el) => el !== id);
     this.memberCnt--;
   }
   setGame() {
@@ -47,9 +50,9 @@ class Service {
   }
 
   // FUNCTION 방 생성 및 삭제
-  addRoom(roomCode) {
+  addRoom(roomCode, id) {
     //this.room.push(roomCode);
-    this.roomInfo[roomCode] = new Room();
+    this.roomInfo[roomCode] = new Room(id);
     console.log(this.roomInfo);
   }
 
@@ -71,18 +74,18 @@ class Service {
   }
 
   // FUNCTION 방 떠나기
-  leaveRoom(roomCode) {
+  leaveRoom(roomCode, id) {
     if (!this.findRoom(roomCode)) {
       console.log(this.roomInfo);
       return;
     }
-    this.roomInfo[roomCode].removeMember();
+    this.roomInfo[roomCode].removeMember(id);
     console.log(this.roomInfo[roomCode].getMemberCnt());
     if (this.roomInfo[roomCode].getMemberCnt() <= 0) this.deleteRoom(roomCode);
   }
 
   // FUNCTION 방 참가
-  joinRoom(roomCode) {
+  joinRoom(roomCode, id) {
     let result;
 
     console.log(this.findRoom(roomCode));
@@ -91,7 +94,7 @@ class Service {
         // console.log('인원이 초과되었습니다.');
         result = new Status(501, undefined, '인원이 초과되었습니다.');
       } else {
-        this.roomInfo[roomCode].addMember();
+        this.roomInfo[roomCode].addMember(id);
         console.log(this.roomInfo);
         result = new Status(200, undefined, '방 입장');
       }
