@@ -9,7 +9,7 @@ export default function joinRoom(request, response, service) {
   if (service.findRoom(code)) {
     result = service.joinRoom(code);
   } else {
-    result = new Status(404, undefined, '해당  방 정보가 없습니다.');
+    result = new Status(404, undefined, '해당 방 정보가 없습니다.');
   }
 
   result.send(response);

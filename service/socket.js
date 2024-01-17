@@ -6,33 +6,6 @@ const initSocket = (server, service) => {
   const io = new Server(server, {
     cors: corsOptions,
   });
-
-  // io.sockets.on('connection', function (socket) {
-  //   socketList[socket.id] = socket;
-  //   console.log(socket.id);
-  //   console.log('connection : %s sockets connected', Object.keys(socketList).length);
-
-  //   // FUNCTION 새로운 방 생성
-  //   socket.on('newRoom', (msg) => {
-  //     const message = { userName: socket.userName, msg: msg };
-  //     console.log(`{ userName: ${socket.userName}, msg: ${msg} }`);
-  //     // io.sockets.emit('newMsgFromServer', message);
-  //   });
-
-  //   // FUNCTION 방 떠나기
-  //   socket.on('leaveRoom', (code) => {
-  //     console.log(`leaveRoom ${code}`);
-  //     service.leaveRoom(code);
-  //   });
-
-  //   socket.on('disconnect', () => {
-  //     if (this.socketList[socket.id]) {
-  //       delete this.socketList[socket.id];
-  //     }
-  //     console.log('disconnect');
-  //   });
-  // });
-
   return io;
 };
 
@@ -46,10 +19,25 @@ export const setEvent = (io) => {
     console.log('connection : %s sockets connected', Object.keys(socketList).length);
 
     // FUNCTION 새로운 방 생성
-    socket.on('newRoom', (code) => {
+    socket.on('addRoom', (clientId) => {
+      const code = service.getCode();
       console.log(`{ userName: ${socket.userName}, code: ${code} }`);
       service.addRoom(code, id);
-      // io.sockets.emit('newMsgFromServer', message);
+      console.log(clientId, id);
+      if (clientId === id) {
+        io.sockets.emit('getNewRoomCode', code);
+        //io.sockets.socket(clientId).emit('getNewRoomCode', code);
+      }
+    });
+
+    // FUNCTION 방 입장
+    socket.on('joinRoom', (code) => {
+      console.log(`{ userName: ${socket.userName}, code: ${code} }`);
+      const result = service.joinRoom(code, id);
+      if (result.status !== 200) {
+        io.sockets.emit('alertToClient', result.message);
+        return;
+      }
     });
 
     // FUNCTION 방 떠나기
