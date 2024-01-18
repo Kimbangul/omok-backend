@@ -28,11 +28,11 @@ export const setEvent = (io) => {
     });
 
     // FUNCTION 방 입장
-    socket.on('joinRoom', (code) => {
+    socket.on('joinRoom', (code, clientId) => {
       console.log(`{ userName: ${socket.userName}, code: ${code} }`);
-      const result = service.joinRoom(code, id);
+      const result = service.joinRoom(code, clientId);
       if (result.status !== 200) {
-        io.sockets.emit('alertToClient', result.message);
+        io.to(clientId).emit('alertToClient', result.message);
         return;
       }
     });

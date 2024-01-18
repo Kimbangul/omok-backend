@@ -104,6 +104,11 @@ class Service {
     }
     return result;
   }
+
+  // FUNCTION 방에 2인 접속 시 매칭
+  matchGame(roomCode) {
+    const roomMember = roomInfo[roomCode].member;
+  }
 }
 
 const service = new Service();
