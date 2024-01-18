@@ -31,9 +31,17 @@ export const setEvent = (io) => {
     socket.on('joinRoom', (code, clientId) => {
       console.log(`{ userName: ${socket.userName}, code: ${code} }`);
       const result = service.joinRoom(code, clientId);
+
       if (result.status !== 200) {
         io.to(clientId).emit('alertToClient', result.message);
         return;
+      }
+
+      const member = result.data.member;
+      if (member.length === 2) {
+        member.forEach((el) => {
+          io.to(el).emit('alertToClient', '방 입장');
+        });
       }
     });
 

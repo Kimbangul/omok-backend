@@ -95,8 +95,9 @@ class Service {
         result = new Status(501, undefined, '인원이 초과되었습니다.');
       } else {
         this.roomInfo[roomCode].addMember(id);
-        console.log(this.roomInfo);
-        result = new Status(200, undefined, '방 입장');
+        const data = { member: this.roomInfo[roomCode].member, code: roomCode };
+        console.log(data);
+        result = new Status(200, data, '방 입장');
       }
     } else {
       result = new Status(501, undefined, '방 정보가 없습니다.');
@@ -106,9 +107,7 @@ class Service {
   }
 
   // FUNCTION 방에 2인 접속 시 매칭
-  matchGame(roomCode) {
-    const roomMember = roomInfo[roomCode].member;
-  }
+  matchGame(roomCode) {}
 }
 
 const service = new Service();
