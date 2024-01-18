@@ -24,10 +24,7 @@ export const setEvent = (io) => {
       console.log(`{ userName: ${socket.userName}, code: ${code} }`);
       service.addRoom(code, id);
       console.log(clientId, id);
-      if (clientId === id) {
-        io.sockets.emit('getNewRoomCode', code);
-        //io.sockets.socket(clientId).emit('getNewRoomCode', code);
-      }
+      io.to(clientId).emit('getNewRoomCode', code);
     });
 
     // FUNCTION 방 입장
