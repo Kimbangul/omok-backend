@@ -40,7 +40,7 @@ export const setEvent = (io) => {
       const member = result.data.member;
       if (member.length === 2) {
         member.forEach((el) => {
-          io.to(el).emit('alertToClient', '방 입장');
+          io.to(el).emit('setMatch', result.data);
         });
       }
     });
