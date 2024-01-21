@@ -5,6 +5,7 @@ import Status from '../router/status.js';
 class Room {
   constructor(id) {
     this.member = [id];
+    this.host = id;
     this.memberCnt = 1;
     this.score = { black: 0, white: 0 };
     this.gameState = [];
@@ -95,7 +96,7 @@ class Service {
         result = new Status(501, undefined, '인원이 초과되었습니다.');
       } else {
         this.roomInfo[roomCode].addMember(id);
-        const data = { member: this.roomInfo[roomCode].member, code: roomCode };
+        const data = this.roomInfo[roomCode];
         console.log(data);
         result = new Status(200, data, '방 입장');
       }
@@ -105,9 +106,6 @@ class Service {
     }
     return result;
   }
-
-  // FUNCTION 방에 2인 접속 시 매칭
-  matchGame(roomCode) {}
 }
 
 const service = new Service();
