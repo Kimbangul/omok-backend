@@ -51,6 +51,19 @@ export const setEvent = (io) => {
       service.leaveRoom(code, id);
     });
 
+    // FUNCTION 게임 시작
+    socket.on('startGame', (info) => {
+      const member = info.member;
+      const stageSize = info.input;
+      const code = info.code;
+      console.log(info);
+
+      service.updateRoom(code, { stageSize: stageSize });
+      member.forEach((el) => {
+        io.to(el).emit('doneStartGame', service.roomInfo[code]);
+      });
+    });
+
     socket.on('disconnect', () => {
       if (id in socketList) {
         delete socketList[id];

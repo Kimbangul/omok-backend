@@ -3,12 +3,14 @@ import Status from '../router/status.js';
 
 // CLASS 방 정보
 class Room {
-  constructor(id) {
+  constructor(id, roomCode) {
+    this.code = roomCode;
     this.member = [id];
     this.host = id;
     this.memberCnt = 1;
     this.score = { black: 0, white: 0 };
     this.gameState = [];
+    this.stageSize = { row: 0, cell: 0 };
   }
   getMemberCnt() {
     return this.memberCnt;
@@ -33,6 +35,10 @@ class Room {
       white: white,
     };
   }
+  update(state) {
+    // this = {...this, ...state};
+    Object.assign(this, { ...state });
+  }
 }
 // CLASS 서비스 로직
 class Service {
@@ -53,7 +59,7 @@ class Service {
   // FUNCTION 방 생성 및 삭제
   addRoom(roomCode, id) {
     //this.room.push(roomCode);
-    this.roomInfo[roomCode] = new Room(id);
+    this.roomInfo[roomCode] = new Room(id, roomCode);
     console.log(this.roomInfo);
   }
 
@@ -105,6 +111,13 @@ class Service {
       // result = { message: '방 정보가 없습니다.' };
     }
     return result;
+  }
+
+  // FUNCTION 방 업데이트
+  updateRoom(roomCode, info) {
+    if (this.findRoom(roomCode)) {
+      this.roomInfo[roomCode].update(info);
+    }
   }
 }
 
