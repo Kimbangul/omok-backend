@@ -74,6 +74,14 @@ export const setEvent = (io) => {
       });
     });
 
+    // FUNCTION 승패 결정 시
+    socket.on('endGame', (code, msg) => {
+      const member = info.member;
+      member.forEach((el) => {
+        io.to(el).emit('alertToClient', msg);
+      });
+    });
+
     socket.on('disconnect', () => {
       if (id in socketList) {
         delete socketList[id];
