@@ -64,6 +64,16 @@ export const setEvent = (io) => {
       });
     });
 
+    // FUNCTION 클라이언트 진행상황을 서버에 업데이트
+    socket.on('updateServer', (code, info) => {
+      const member = info.member;
+      service.updateRoom(code, info);
+
+      member.forEach((el) => {
+        io.to(el).emit('updateClient', service.roomInfo[code]);
+      });
+    });
+
     socket.on('disconnect', () => {
       if (id in socketList) {
         delete socketList[id];

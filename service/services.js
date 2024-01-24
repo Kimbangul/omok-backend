@@ -117,6 +117,9 @@ class Service {
   updateRoom(roomCode, info) {
     if (this.findRoom(roomCode)) {
       this.roomInfo[roomCode].update(info);
+      console.log('========update game============');
+      console.log(this.roomInfo[roomCode]);
+      console.log('========update game============');
     }
   }
 }
