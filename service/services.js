@@ -7,6 +7,7 @@ class Room {
     this.code = roomCode;
     this.member = [id];
     this.host = id;
+    this.turn = 0;
     this.memberCnt = 1;
     this.score = { black: 0, white: 0 };
     this.gameState = [];
