@@ -68,15 +68,14 @@ export const setEvent = (io) => {
     socket.on('updateServer', (code, info) => {
       const member = info.member;
       service.updateRoom(code, info);
-
+      console.log(member);
       member.forEach((el) => {
         io.to(el).emit('updateClient', service.roomInfo[code]);
       });
     });
 
     // FUNCTION 승패 결정 시
-    socket.on('endGame', (code, msg) => {
-      const member = info.member;
+    socket.on('endGame', (member, msg) => {
       member.forEach((el) => {
         io.to(el).emit('alertToClient', msg);
       });
