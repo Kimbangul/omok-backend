@@ -56,7 +56,7 @@ export const setEvent = (io) => {
     socket.on('startGame', (info) => {
       const stageSize = info.input;
       const code = info.code;
-      console.log(info);
+      // console.log(info);
 
       service.updateRoom(code, { stageSize: stageSize });
       service.getMember(code).forEach((el) => {
@@ -67,6 +67,9 @@ export const setEvent = (io) => {
     // FUNCTION 클라이언트 진행상황을 서버에 업데이트
     socket.on('updateServer', (code, info) => {
       service.updateRoom(code, info);
+      console.log('====== 서버 업데이트');
+      console.log(`====== 업데이트id: ${id}`);
+      console.log(info);
       service.getMember(code).forEach((el) => {
         io.to(el).emit('updateClient', service.roomInfo[code]);
       });
@@ -74,13 +77,14 @@ export const setEvent = (io) => {
 
     // FUNCTION 승패 결정 시
     socket.on('endGame', (code, member, msg) => {
-      service.resetRoom(code, info);
+      console.log('====end game');
       service.getMember(code).forEach((el) => {
         io.to(el).emit('alertToClient', msg);
       });
     });
 
-    socket.on('reset', (code) => {
+    socket.on('resetRoom', (code, info) => {
+      console.log('====resetRoom');
       service.resetRoom(code, info);
       service.getMember(code).forEach((el) => {
         io.to(el).emit('updateClient', service.roomInfo[code]);

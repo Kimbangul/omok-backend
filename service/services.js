@@ -9,7 +9,7 @@ class Room {
     this.host = id;
     this.turn = 0;
     this.memberCnt = 1;
-    this.score = { black: 0, white: 0 };
+    this.score = { 0: 0, 1: 0 };
     this.stageState = [];
     this.stageSize = { row: 0, cell: 0 };
     this.gameState = 'room';
@@ -33,8 +33,8 @@ class Room {
   }
   setScore(black, white) {
     this.score = {
-      black: black,
-      white: white,
+      0: black,
+      1: white,
     };
   }
   update(state) {
@@ -77,7 +77,7 @@ class Service {
 
   // FUNCTION 방이 존재하는지 확인
   findRoom(roomCode) {
-    console.log(this.roomInfo[roomCode]);
+    // console.log(this.roomInfo[roomCode]);
     if (this.roomInfo[roomCode] !== undefined && this.roomInfo[roomCode] !== null) {
       console.log(true);
       return true;
@@ -89,11 +89,11 @@ class Service {
   // FUNCTION 방 떠나기
   leaveRoom(roomCode, id) {
     if (!this.findRoom(roomCode)) {
-      console.log(this.roomInfo);
+      // console.log(this.roomInfo);
       return;
     }
     this.roomInfo[roomCode].removeMember(id);
-    console.log(this.roomInfo[roomCode].getMemberCnt());
+    //console.log(this.roomInfo[roomCode].getMemberCnt());
     if (this.roomInfo[roomCode].getMemberCnt() <= 0) this.deleteRoom(roomCode);
   }
 
@@ -101,7 +101,7 @@ class Service {
   joinRoom(roomCode, id) {
     let result;
 
-    console.log(this.findRoom(roomCode));
+    // console.log(this.findRoom(roomCode));
     if (this.findRoom(roomCode)) {
       if (this.roomInfo[roomCode].getMemberCnt() >= 2) {
         // console.log('인원이 초과되었습니다.');
@@ -136,8 +136,6 @@ class Service {
   updateRoom(roomCode, info) {
     if (this.findRoom(roomCode)) {
       this.roomInfo[roomCode].update(info);
-      console.log('========update game============');
-      console.log(this.roomInfo[roomCode]);
       console.log('========update game============');
     }
   }
