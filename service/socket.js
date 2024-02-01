@@ -40,7 +40,8 @@ export const setEvent = (io) => {
       const member = result.data.member;
       if (member.length === 2) {
         member.forEach((el) => {
-          io.to(el).emit('setMatch', result.data);
+          // io.to(el).emit('setMatch', result.data);
+          io.to(el).emit('updateClient', service.roomInfo[code]);
         });
       }
     });
@@ -53,31 +54,36 @@ export const setEvent = (io) => {
 
     // FUNCTION 게임 시작
     socket.on('startGame', (info) => {
-      const member = info.member;
       const stageSize = info.input;
       const code = info.code;
       console.log(info);
 
       service.updateRoom(code, { stageSize: stageSize });
-      member.forEach((el) => {
+      service.getMember(code).forEach((el) => {
         io.to(el).emit('doneStartGame', service.roomInfo[code]);
       });
     });
 
     // FUNCTION 클라이언트 진행상황을 서버에 업데이트
     socket.on('updateServer', (code, info) => {
-      const member = info.member;
       service.updateRoom(code, info);
-      console.log(member);
-      member.forEach((el) => {
+      service.getMember(code).forEach((el) => {
         io.to(el).emit('updateClient', service.roomInfo[code]);
       });
     });
 
     // FUNCTION 승패 결정 시
-    socket.on('endGame', (member, msg) => {
-      member.forEach((el) => {
+    socket.on('endGame', (code, member, msg) => {
+      service.resetRoom(code, info);
+      service.getMember(code).forEach((el) => {
         io.to(el).emit('alertToClient', msg);
+      });
+    });
+
+    socket.on('reset', (code) => {
+      service.resetRoom(code, info);
+      service.getMember(code).forEach((el) => {
+        io.to(el).emit('updateClient', service.roomInfo[code]);
       });
     });
 

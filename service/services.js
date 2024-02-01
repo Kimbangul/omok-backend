@@ -10,8 +10,9 @@ class Room {
     this.turn = 0;
     this.memberCnt = 1;
     this.score = { black: 0, white: 0 };
-    this.gameState = [];
+    this.stageState = [];
     this.stageSize = { row: 0, cell: 0 };
+    this.gameState = 'room';
   }
   getMemberCnt() {
     return this.memberCnt;
@@ -25,10 +26,10 @@ class Room {
     this.memberCnt--;
   }
   setGame() {
-    this.gameState = [];
+    this.stageState = [];
   }
   updateGame(game) {
-    this.gameState = game;
+    this.stageState = game;
   }
   setScore(black, white) {
     this.score = {
@@ -52,9 +53,13 @@ class Service {
   getCode() {
     const code = String(getRandomInt(1, 1000)).padStart(4, '0');
     if (this.roomInfo[code]) return this.getCode();
-
     this.addRoom(code);
     return code;
+  }
+
+  // FUNCTION 특정 방의 멤버 구하기
+  getMember(code) {
+    return this.roomInfo[code].member;
   }
 
   // FUNCTION 방 생성 및 삭제
@@ -106,12 +111,25 @@ class Service {
         const data = this.roomInfo[roomCode];
         console.log(data);
         result = new Status(200, data, '방 입장');
+        this.roomInfo[roomCode].update({ gameState: 'ready' });
       }
     } else {
       result = new Status(501, undefined, '방 정보가 없습니다.');
       // result = { message: '방 정보가 없습니다.' };
     }
     return result;
+  }
+
+  // FUNCTION 방 초기화
+  resetRoom(roomCode, info) {
+    if (!this.findRoom(roomCode)) return;
+    console.log('reset room');
+    this.roomInfo[roomCode].update({
+      ...info,
+      gameState: 'ready',
+      stageState: null,
+      turn: 0,
+    });
   }
 
   // FUNCTION 방 업데이트
