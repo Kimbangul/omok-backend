@@ -14,6 +14,8 @@ export const setEvent = (io) => {
 
   io.sockets.on('connection', function (socket) {
     const id = socket.id;
+    let room = null;
+
     socketList[id] = socket;
     console.log(id);
     console.log('connection : %s sockets connected', Object.keys(socketList).length);
@@ -23,6 +25,7 @@ export const setEvent = (io) => {
       const code = service.getCode();
       console.log(`{ userName: ${socket.userName}, code: ${code} }`);
       service.addRoom(code, id);
+      room = code;
       console.log(clientId, id);
       io.to(clientId).emit('getNewRoomCode', code);
     });
@@ -36,7 +39,7 @@ export const setEvent = (io) => {
         io.to(clientId).emit('alertToClient', result.message);
         return;
       }
-
+      room = code;
       const member = result.data.member;
       if (member.length === 2) {
         member.forEach((el) => {
@@ -50,6 +53,7 @@ export const setEvent = (io) => {
     socket.on('leaveRoom', (code) => {
       console.log(`leaveRoom ${code}`);
       service.leaveRoom(code, id);
+      room = null;
     });
 
     // FUNCTION 게임 시작
@@ -94,6 +98,16 @@ export const setEvent = (io) => {
     socket.on('disconnect', () => {
       if (id in socketList) {
         delete socketList[id];
+        console.log(socketList);
+      }
+      if (room !== null) {
+        console.log(`room: ${room}`);
+        service.leaveRoom(room, id);
+
+        if (service.roomInfo[room] && ['ready', 'start', 'end'].includes(service.roomInfo[room].gameState))
+          service.getMember(room).forEach((el) => {
+            io.to(el).emit('alertToClient', '참가 인원이 방을 떠났습니다.');
+          });
       }
       console.log('disconnect');
     });
