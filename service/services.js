@@ -125,8 +125,8 @@ class Service {
     if (!this.findRoom(roomCode)) return;
     console.log('reset room');
     this.roomInfo[roomCode].update({
-      ...info,
       gameState: 'ready',
+      ...info,
       stageState: null,
       turn: 0,
     });

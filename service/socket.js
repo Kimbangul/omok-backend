@@ -106,7 +106,12 @@ export const setEvent = (io) => {
 
         if (service.roomInfo[room] && ['ready', 'start', 'end'].includes(service.roomInfo[room].gameState))
           service.getMember(room).forEach((el) => {
+            console.log('---------메세지 전송');
+            console.log(el);
+            console.log('---------메세지 전송');
             io.to(el).emit('alertToClient', '참가 인원이 방을 떠났습니다.');
+            service.resetRoom(room, { gameState: 'room' });
+            io.to(el).emit('updateClient', service.roomInfo[room]);
           });
       }
       console.log('disconnect');
