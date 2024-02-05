@@ -110,7 +110,7 @@ export const setEvent = (io) => {
             console.log(el);
             console.log('---------메세지 전송');
             io.to(el).emit('alertToClient', '참가 인원이 방을 떠났습니다.');
-            service.resetRoom(room, { gameState: 'room' });
+            service.resetRoom(room, { gameState: 'room', score: { 0: 0, 1: 0 } });
             io.to(el).emit('updateClient', service.roomInfo[room]);
           });
       }

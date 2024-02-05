@@ -7,6 +7,6 @@ export function getRandomInt(min, max) {
 }
 
 export const corsOptions = {
-  origin: ['http://127.0.0.1:3000', 'http://localhost:3000'], // 출처 허용 옵션
+  origin: ['http://127.0.0.1:3000', 'http://localhost:3000', 'https://omok-taupe.vercel.app'], // 출처 허용 옵션
   credentials: true, // 사용자 인증이 필요한 리소스(쿠키 등) 접근
 };
